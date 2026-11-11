@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-tema="claro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Safra Sentinela</title>
+    <meta name="description" content="Alerta de quebra de safra para a agricultura familiar do Semiárido.">
+    <link rel="icon" href="/img/marca.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/vendor/leaflet.css">
+    <link rel="stylesheet" href="/css/app.css">
+    <script>
+        // aplica tema e tamanho de texto antes da primeira pintura
+        try {
+            const p = JSON.parse(localStorage.getItem('safra.preferencias') || '{}');
+            const escuro = p.tema ? p.tema === 'escuro' : matchMedia('(prefers-color-scheme: dark)').matches;
+            document.documentElement.dataset.tema = escuro ? 'escuro' : 'claro';
+            if (p.texto) document.documentElement.dataset.texto = p.texto;
+        } catch (e) { /* preferências indisponíveis: segue com o padrão */ }
+    </script>
+</head>
+<body>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+    <!-- ENTRADA -->
+    <section class="entrada" id="tela-entrada" hidden>
+        <div class="entrada-territorio">
+            <div class="entrada-marca">
+                <img src="/img/marca.svg" alt="" width="44" height="26">
+                <span>Safra Sentinela</span>
+            </div>
+            <canvas id="entrada-mapa" aria-hidden="true"></canvas>
+            <div class="entrada-texto">
+                <h1>O satélite vê a seca chegar. Quem planta precisa saber antes da colheita.</h1>
+                <p id="entrada-fato">Cada ponto é um município do Semiárido, colorido pelo risco de quebra da safra de milho.</p>
+                <ul class="legenda" aria-label="Legenda">
+                    <li><span class="ponto alto"></span>Risco alto</li>
+                    <li><span class="ponto atencao"></span>Atenção</li>
+                    <li><span class="ponto baixo"></span>Risco baixo</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="entrada-acesso">
+            <form class="entrada-form" id="form-login" novalidate>
+                <h2>Entrar na plataforma</h2>
+                <p class="apoio">Use o e-mail cadastrado do grupo. A senha é o RM.</p>
+
+                <label for="login-email">E-mail</label>
+                <input id="login-email" name="email" type="email" autocomplete="username" required
+                       placeholder="voce@exemplo.com">
+
+                <label for="login-senha">Senha</label>
+                <div class="campo-senha">
+                    <input id="login-senha" name="senha" type="password" autocomplete="current-password" required>
+                    <button type="button" id="login-ver" aria-pressed="false">Mostrar</button>
+                </div>
+
+                <p class="erro" id="login-erro" role="alert" hidden></p>
+
+                <button class="botao primario" type="submit" id="login-entrar">Entrar</button>
+                <div class="ou"><span>ou</span></div>
+                <button class="botao" type="button" id="login-visitante">Entrar como visitante</button>
+                <p class="apoio pequeno">O acesso de visitante abre a plataforma completa, só para leitura, e serve para a avaliação do projeto.</p>
+            </form>
+
+            <footer class="entrada-rodape">
+                <span class="fiap" data-fiap></span>
+                <p>Global Solution 2026/2, CitizenTech<br>Grupo RHEAL, turma 2TSCOA</p>
+            </footer>
+        </div>
+    </section>
+
+    <!-- PLATAFORMA -->
+    <div class="plataforma" id="plataforma" hidden>
+        <header class="topo">
+            <a class="topo-marca" href="#/painel" aria-label="Safra Sentinela, ir para o painel">
+                <img src="/img/marca.svg" alt="" width="34" height="20">
+                <span>Safra Sentinela</span>
+            </a>
+            <nav class="topo-nav" aria-label="Seções">
+                <a href="#/painel" data-rota="painel">Painel</a>
+                <a href="#/analises" data-rota="analises">Análises</a>
+                <a href="#/assistente" data-rota="assistente">Assistente</a>
+                <a href="#/utilidades" data-rota="utilidades">Utilidades</a>
+            </nav>
+            <div class="topo-direita">
+                <span class="fiap" data-fiap></span>
+                <div class="menu-usuario">
+                    <button id="usuario-botao" aria-haspopup="true" aria-expanded="false">
+                        <span class="avatar" id="usuario-iniciais"></span>
+                        <span class="usuario-nome" id="usuario-nome"></span>
+                    </button>
+                    <div class="menu" id="usuario-menu" hidden>
+                        <p class="menu-quem"><b id="menu-nome"></b><span id="menu-papel"></span></p>
+                        <div class="menu-linha">
+                            <span>Tema</span>
+                            <div class="segmentado" role="group" aria-label="Tema">
+                                <button data-tema-opcao="claro">Claro</button>
+                                <button data-tema-opcao="escuro">Escuro</button>
+                            </div>
+                        </div>
+                        <div class="menu-linha">
+                            <span>Texto</span>
+                            <div class="segmentado" role="group" aria-label="Tamanho do texto">
+                                <button data-texto-opcao="normal">Normal</button>
+                                <button data-texto-opcao="grande">Grande</button>
+                            </div>
+                        </div>
+                        <button class="botao" id="sair">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main id="conteudo" tabindex="-1"></main>
+
+        <footer class="rodape">
+            <p>Safra 2026: previsão atual, ainda sem resultado oficial. Safras de 2020 a 2025: previsões conferidas com o resultado do IBGE. Chuva recente: NASA POWER, com cerca de 3 dias de atraso.</p>
+            <p>Projeto acadêmico do Grupo RHEAL para a Global Solution 2026/2 da FIAP.</p>
+        </footer>
+    </div>
+
+    <div class="avisos" id="avisos" role="status" aria-live="polite"></div>
+
+    <dialog class="dialogo" id="dialogo">
+        <div id="dialogo-corpo"></div>
+    </dialog>
+
+    <script src="/vendor/leaflet.js"></script>
+    <script src="/vendor/chart.js"></script>
+    <script type="module" src="/js/main.js"></script>
+</body>
+</html>

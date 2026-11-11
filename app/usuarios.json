@@ -1,0 +1,32 @@
+{
+  "ph_meneses@hotmail.com": {
+    "nome": "Luiz Phelipe Silva Menezes Araujo",
+    "papel": "Integrante",
+    "sal": "ff487d40e9326a5d9f22d77548b12690",
+    "hash": "0fb8d176a1dd1b82de9bd115c351c0e2883d4ea4d3a6b683f7d142b8cd75a5a0"
+  },
+  "arthurthomazini40@gmail.com": {
+    "nome": "Arthur Evangelista Thomazini",
+    "papel": "Integrante",
+    "sal": "38c359d257d6ce66da08ea2daeb83ba1",
+    "hash": "8050b00e0354f48d46822078a1d420fa73b5a9acbb08330c2fd927e7dcf653d7"
+  },
+  "raphaelmartins111@gmail.com": {
+    "nome": "Raphael Martins Teixeira Amaral",
+    "papel": "Integrante",
+    "sal": "ae53a7ff28f03af5247bb985fd3349a1",
+    "hash": "c3ad1ddcdadbf10b93e02eeb374783bd8abb1f83dacecd803a9fba98175d2fe6"
+  },
+  "maioelom@gmail.com": {
+    "nome": "Elom Eduardo Maio Nascimento",
+    "papel": "Integrante",
+    "sal": "cca27b598b1db7cd49b4b72c936973d8",
+    "hash": "4486c2a966ffa94caadf2dfbd3e34e89a5e803a703ce24aa23297a893213177f"
+  },
+  "henriquemeira@outlook.com": {
+    "nome": "Henrique Soares Meira",
+    "papel": "Integrante",
+    "sal": "58e62d08164bb5ff22116e9121c408b7",
+    "hash": "f60851d873f700f19757e53850e2ceb18f6d4b6740ca8dbf35232887b12de282"
+  }
+}
